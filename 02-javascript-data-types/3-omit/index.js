@@ -5,5 +5,14 @@
  * @returns {object} - returns the new object
  */
 export const omit = (obj, ...fields) => {
+  const arrFromObject = Object.entries(obj);
+  const newArr = [];
 
+  arrFromObject.forEach(([key,value]) =>{
+    if(!fields.includes(key)){
+      newArr.push([key, value])
+    }
+  })
+
+  return Object.fromEntries(newArr);
 };
