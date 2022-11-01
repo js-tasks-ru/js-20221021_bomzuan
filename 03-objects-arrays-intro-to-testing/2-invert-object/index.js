@@ -3,6 +3,13 @@
  * @param {object} obj - the initial object
  * @returns {object | undefined} - returns new object or undefined if nothing did't pass
  */
-export function invertObj(obj) {
-
+export function invertObj(obj=null) {
+  if(obj ===null){
+    return;
+  }
+  const newObj= []
+    for(const[key,value] of Object.entries(obj)){
+      newObj.push([value,key])
+    }
+    return Object.fromEntries(newObj);
 }
