@@ -40,7 +40,7 @@ export default class NotificationMessage {
       NotificationMessage.resetHandler.removeDuplicate();
     }
     parent.append(this.element)
-    // this.timerRemoval();
+
     this.timeoutID = setTimeout(()=>{
       this.removeDuplicate()
     }, this.duration)
@@ -50,9 +50,6 @@ export default class NotificationMessage {
 
   get statusChecker(){
     return this.type === 'success' ? 'success': 'error';
-  }
-
-  timerRemoval(){
   }
 
   removeDuplicate(){
