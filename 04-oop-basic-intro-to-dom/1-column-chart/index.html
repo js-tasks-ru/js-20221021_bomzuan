@@ -10,7 +10,10 @@
     <div class="dashboard__charts">
       <div id="orders" class="dashboard__chart_orders"></div>
       <div id="sales" class="dashboard__chart_sales"></div>
-      <div id="customers" class="dashboard__chart_customers"></div>
+      <div id="customers" class="dashboard__chart_customers">
+
+      </div>
+
     </div>
 
     <script type="module">
@@ -39,7 +42,6 @@
         label: 'customers',
         value: 321
       });
-
       orders.append(ordersChart.element);
       sales.append(salesChart.element);
       customers.append(customersChart.element);
