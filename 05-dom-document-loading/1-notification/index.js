@@ -1,67 +1,66 @@
 export default class NotificationMessage {
-  static resetHandler;
+  static activeNotification;
+
   element;
-  timeoutID;
-  constructor(
-    message ='',
-    {
-      duration = 2000,
-      type = 'success'
-              }={}) {
+  timerId;
+
+  constructor(message = '', {
+    duration = 2000,
+    type = 'success',
+  } = {}) {
     this.message = message;
-    this.duration = duration;
+    this.durationInSeconds = (duration / 1000) + 's';
     this.type = type;
+    this.duration = duration;
 
     this.render();
   }
 
-  get template(){
-    return `
-      <div id="foo" class="notification ${this.statusChecker}" style="--value:${this.duration/1000}s">
-        <div class="timer"></div>
-        <div class="inner-wrapper">
-          <div class="notification-header">Notification</div>
-          <div class="notification-body">
-            ${this.message}
-          </div>
+  get template() {
+    return `<div class="notification ${this.type}" style="--value:${this.durationInSeconds}">
+      <div class="timer"></div>
+      <div class="inner-wrapper">
+        <div class="notification-header">Notification</div>
+        <div class="notification-body">
+          ${this.message}
         </div>
       </div>
-    `
+    </div>`;
   }
 
-  render(){
-    const wrapper = document.createElement('div');
-    wrapper.innerHTML = this.template;
-    this.element= wrapper.firstElementChild;
+  render() {
+    const element = document.createElement('div');
+
+    element.innerHTML = this.template;
+
+    this.element = element.firstElementChild;
   }
 
-  show(parent = document.body){
-    if(NotificationMessage.resetHandler){
-      NotificationMessage.resetHandler.removeDuplicate();
+  show(parent = document.body) {
+    if (NotificationMessage.activeNotification) {
+      NotificationMessage.activeNotification.remove();
     }
-    parent.append(this.element)
 
-    this.timeoutID = setTimeout(()=>{
-      this.removeDuplicate()
-    }, this.duration)
+    parent.append(this.element);
 
-    NotificationMessage.resetHandler = this;
+    this.timerId = setTimeout(() => {
+      this.remove();
+    }, this.duration);
+
+    NotificationMessage.activeNotification = this;
   }
 
-  get statusChecker(){
-    return this.type === 'success' ? 'success': 'error';
+  remove() {
+    clearTimeout(this.timerId);
+
+    if (this.element) {
+      this.element.remove();
+    }
   }
 
-  removeDuplicate(){
-      clearTimeout(this.timeoutID);
-
-      if(this.element){
-        this.element.remove()
-      }
-  }
-  destroy(){
-    this.removeDuplicate();
+  destroy() {
+    this.remove();
     this.element = null;
-    NotificationMessage.resetHandler = null;
+    NotificationMessage.activeNotification = null;
   }
 }
